@@ -8,12 +8,12 @@
 
 namespace Stenope\Bundle\Behaviour;
 
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 
 interface ContentManagerAwareInterface
 {
     /**
      * Sets the owning ContentManager object.
      */
-    public function setContentManager(ContentManager $contentManager);
+    public function setContentManager(ContentManagerInterface $contentManager);
 }

@@ -8,16 +8,16 @@
 
 namespace Stenope\Bundle\HttpKernel\Controller\ArgumentResolver;
 
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class ContentArgumentResolver implements ArgumentValueResolverInterface
 {
-    private ContentManager $contentManager;
+    private ContentManagerInterface $contentManager;
 
-    public function __construct(ContentManager $contentManager)
+    public function __construct(ContentManagerInterface $contentManager)
     {
         $this->contentManager = $contentManager;
     }

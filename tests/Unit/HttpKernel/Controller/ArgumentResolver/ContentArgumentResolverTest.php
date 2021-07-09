@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Stenope\Bundle\Content;
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use Stenope\Bundle\HttpKernel\Controller\ArgumentResolver\ContentArgumentResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -23,13 +23,13 @@ class ContentArgumentResolverTest extends TestCase
 
     private ContentArgumentResolver $resolver;
 
-    /** @var ContentManager|ObjectProphecy */
+    /** @var ContentManagerInterface|ObjectProphecy */
     private ObjectProphecy $manager;
 
     protected function setUp(): void
     {
         $this->resolver = new ContentArgumentResolver(
-            ($this->manager = $this->prophesize(ContentManager::class))->reveal()
+            ($this->manager = $this->prophesize(ContentManagerInterface::class))->reveal()
         );
     }
 

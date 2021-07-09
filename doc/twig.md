@@ -1,6 +1,6 @@
 # Twig integration
 
-Stenope provides a Twig extension to help you interact with the `ContentManager`
+Stenope provides a Twig extension to help you interact with the `ContentManagerInterface`
 from your templates.
 
 ## Functions

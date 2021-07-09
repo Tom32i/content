@@ -16,6 +16,7 @@ use Stenope\Bundle\Builder\Sitemap;
 use Stenope\Bundle\Command\BuildCommand;
 use Stenope\Bundle\Command\DebugCommand;
 use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use Stenope\Bundle\Decoder\HtmlDecoder;
 use Stenope\Bundle\Decoder\MarkdownDecoder;
 use Stenope\Bundle\DependencyInjection\tags;
@@ -70,7 +71,8 @@ return static function (ContainerConfigurator $container): void {
             '$propertyAccessor' => service('property_accessor'),
             '$expressionLanguage' => service(ExpressionLanguage::class)->nullOnInvalid(),
             '$stopwatch' => service('debug.stopwatch')->nullOnInvalid(),
-        ])
+        ])->call('setContentManager', [service(ContentManagerInterface::class)])
+        ->alias(ContentManagerInterface::class, ContentManager::class)
 
         // Content providers factories
         ->set(ContentProviderFactory::class)->args(['$factories' => tagged_iterator(tags\content_provider_factory)])
@@ -78,7 +80,7 @@ return static function (ContainerConfigurator $container): void {
 
         // Debug
         ->set(DebugCommand::class)->args([
-            '$manager' => service(ContentManager::class),
+            '$manager' => service(ContentManagerInterface::class),
             '$stopwatch' => service('stenope.build.stopwatch'),
         ])
         ->tag('console.command', ['command' => DebugCommand::getDefaultName()])
@@ -164,7 +166,7 @@ return static function (ContainerConfigurator $container): void {
 
         // Symfony HttpKernel controller argument resolver
         ->set(ContentArgumentResolver::class)
-            ->args(['$contentManager' => service(ContentManager::class)])
+            ->args(['$contentManager' => service(ContentManagerInterface::class)])
             ->tag('controller.argument_value_resolver', [
                 'priority' => 110, // Prior to RequestAttributeValueResolver to resolve from route attribute
             ])
@@ -172,7 +174,7 @@ return static function (ContainerConfigurator $container): void {
         // Twig
         ->set(ContentExtension::class)->tag('twig.extension')
         ->set(ContentRuntime::class)
-            ->args(['$contentManager' => service(ContentManager::class)])
+            ->args(['$contentManager' => service(ContentManagerInterface::class)])
             ->tag('twig.runtime')
 
         // Assets

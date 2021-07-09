@@ -4,15 +4,15 @@ namespace App\Controller;
 
 use App\Model\Index;
 use App\Model\Page;
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DocController extends AbstractController
 {
-    private ContentManager $contentManager;
+    private ContentManagerInterface $contentManager;
 
-    public function __construct(ContentManager $contentManager)
+    public function __construct(ContentManagerInterface $contentManager)
     {
         $this->contentManager = $contentManager;
     }

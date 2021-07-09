@@ -11,7 +11,7 @@ namespace Stenope\Bundle\Tests\Unit\Processor;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Stenope\Bundle\Content;
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use Stenope\Bundle\Processor\ResolveContentLinksProcessor;
 use Stenope\Bundle\ReverseContent\RelativeLinkContext;
 use Stenope\Bundle\Routing\ContentUrlResolver;
@@ -44,7 +44,7 @@ class ResolveContentLinksProcessorTest extends TestCase
 
         $processor = new ResolveContentLinksProcessor($urlGenerator->reveal(), new NaiveHtmlCrawlerManager());
 
-        $manager = $this->prophesize(ContentManager::class);
+        $manager = $this->prophesize(ContentManagerInterface::class);
         $processor->setContentManager($manager->reveal());
 
         $manager->reverseContent(new RelativeLinkContext(

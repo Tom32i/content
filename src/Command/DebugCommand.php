@@ -8,7 +8,7 @@
 
 namespace Stenope\Bundle\Command;
 
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use function Stenope\Bundle\ExpressionLanguage\expr;
 use Stenope\Bundle\ExpressionLanguage\Expression;
 use Stenope\Bundle\TableOfContent\Headline;
@@ -31,10 +31,10 @@ class DebugCommand extends Command
 
     protected static $defaultName = 'debug:stenope:content';
 
-    private ContentManager $manager;
+    private ContentManagerInterface $manager;
     private Stopwatch $stopwatch;
 
-    public function __construct(ContentManager $manager, Stopwatch $stopwatch)
+    public function __construct(ContentManagerInterface $manager, Stopwatch $stopwatch)
     {
         $this->manager = $manager;
         $this->stopwatch = $stopwatch;

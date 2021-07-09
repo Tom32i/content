@@ -8,12 +8,12 @@
 
 namespace Stenope\Bundle\ReverseContent;
 
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 
 /**
  * Context from which to resolve a content.
  *
- * @see ContentManager::reverseContent()
+ * @see ContentManagerInterface::reverseContent()
  */
 abstract class Context
 {

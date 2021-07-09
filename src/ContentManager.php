@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-class ContentManager
+class ContentManager implements ContentManagerInterface
 {
     private DecoderInterface $decoder;
     private DenormalizerInterface $denormalizer;
@@ -50,6 +50,8 @@ class ContentManager
     private array $reversedCache = [];
 
     private bool $managerInjected = false;
+
+    private ?ContentManagerInterface $contentManager;
 
     public function __construct(
         DecoderInterface $decoder,
@@ -76,17 +78,7 @@ class ContentManager
     }
 
     /**
-     * List all content for the given type
-     *
-     * @template T
-     *
-     * @param class-string<T>                  $type     Model FQCN e.g. "App/Model/Article"
-     * @param string|array|callable            $sortBy   String, array or callable
-     * @param string|array|callable|Expression $filterBy Array, callable or an {@link Expression} instance / string
-     *                                                   to filter out with an expression using the ExpressionLanguage
-     *                                                   component.
-     *
-     * @return array<string,T> List of decoded contents with their slug as key
+     * {@inheritdoc}
      */
     public function getContents(string $type, $sortBy = null, $filterBy = null): array
     {
@@ -120,14 +112,14 @@ class ContentManager
         return $contents;
     }
 
-    public function filterBy(array &$contents, $filterBy = null): void
+    private function filterBy(array &$contents, $filterBy = null): void
     {
         if ($filter = $this->getFilterFunction($filterBy)) {
             $contents = array_filter($contents, $filter);
         }
     }
 
-    public function sortBy(array &$contents, $sortBy = null): void
+    private function sortBy(array &$contents, $sortBy = null): void
     {
         if ($sorter = $this->getSortFunction($sortBy)) {
             \set_error_handler(static function (int $severity, string $message, ?string $file, ?int $line): void {
@@ -141,14 +133,7 @@ class ContentManager
     }
 
     /**
-     * Fetch a specific content
-     *
-     * @template T
-     *
-     * @param class-string<T> $type Model FQCN e.g. "App/Model/Article"
-     * @param string          $id   Unique identifier (slug)
-     *
-     * @return T An object of the given type.
+     * {@inheritdoc}
      */
     public function getContent(string $type, string $id): object
     {
@@ -171,6 +156,9 @@ class ContentManager
         throw new ContentNotFoundException($type, $id);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function reverseContent(Context $context): ?Content
     {
         $key = md5(serialize($context));
@@ -345,10 +333,23 @@ class ContentManager
         if (!$this->managerInjected) {
             foreach ($this->processors as $processor) {
                 if ($processor instanceof ContentManagerAwareInterface) {
-                    $processor->setContentManager($this);
+                    $processor->setContentManager($this->contentManager ?? $this);
                 }
             }
             $this->managerInjected = true;
         }
+    }
+
+    /**
+     * Set the actual content manager instance to inject in processors.
+     * Useful whenever this content manager is decorated in order for the processor to use the decorating one.
+     */
+    public function setContentManager(ContentManagerInterface $contentManager): void
+    {
+        if ($contentManager === $this) {
+            return;
+        }
+
+        $this->contentManager = $contentManager;
     }
 }

@@ -8,14 +8,14 @@
 
 namespace Stenope\Bundle\Twig;
 
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class ContentRuntime implements RuntimeExtensionInterface
 {
-    private ContentManager $contentManager;
+    private ContentManagerInterface $contentManager;
 
-    public function __construct(ContentManager $contentManager)
+    public function __construct(ContentManagerInterface $contentManager)
     {
         $this->contentManager = $contentManager;
     }

@@ -68,7 +68,7 @@ In your controller (or service):
 namespace App\Controller;
 
 use App\Model\Article;
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -80,7 +80,7 @@ class BlogController extends AbstractController
     /**
      * @Route("/", name="blog")
      */
-    public function index(ContentManager $contentManager)
+    public function index(ContentManagerInterface $contentManager)
     {
         return $this->render(
             'blog/index.html.twig',
@@ -93,7 +93,7 @@ _Note: contents of the same type can very well be writen in different formats._
 
 ### Fetching a specific content
 
-The ContentManager uses slugs to identify your content.
+The content manager uses slugs to identify your content.
 
 The `slug` argument must exactly match the static file name in your content directory.
 
@@ -105,7 +105,7 @@ Example: `$contentManager->getContent(Article::class, 'how-to-train-your-dragon'
 namespace App\Controller;
 
 use App\Model\Article;
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -119,7 +119,7 @@ class BlogController extends AbstractController
     /**
      * @Route("/{slug}", name="article")
      */
-    public function article(ContentManager $contentManager, string $slug)
+    public function article(ContentManagerInterface $contentManager, string $slug)
     {
         return $this->render(
             'blog/article.html.twig',
@@ -194,7 +194,7 @@ $myDrafts = $contentManager->getContents(
 #### A custom callable supported by the PHP [usort](https://www.php.net/manual/fr/function.usort.php) function
 
 ```php
-$tagedMobileArticles = $contentManager->getContents(
+$taggedMobileArticles = $contentManager->getContents(
     Article::class,
     null,
     fn (Article $article): bool => in_array('mobile', $article->tags)
@@ -206,7 +206,7 @@ $tagedMobileArticles = $contentManager->getContents(
 ```php
 use function Stenope\Bundle\ExpressionLanguage\expr;
 
-$tagedMobileArticles = $contentManager->getContents(
+$taggedMobileArticles = $contentManager->getContents(
     Article::class,
     null,
     expr('"mobile" in _.tags')

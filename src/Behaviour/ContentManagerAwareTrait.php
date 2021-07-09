@@ -8,13 +8,16 @@
 
 namespace Stenope\Bundle\Behaviour;
 
-use Stenope\Bundle\ContentManager;
+use Stenope\Bundle\ContentManagerInterface;
 
+/**
+ * @see ContentManagerAwareInterface
+ */
 trait ContentManagerAwareTrait
 {
-    private ContentManager $contentManager;
+    private ContentManagerInterface $contentManager;
 
-    public function setContentManager(ContentManager $contentManager): void
+    public function setContentManager(ContentManagerInterface $contentManager): void
     {
         $this->contentManager = $contentManager;
     }
